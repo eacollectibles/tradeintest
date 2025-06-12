@@ -1,0 +1,17 @@
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  padding: 2rem;
+  text-align: center;
+}
+form {
+  margin-top: 2rem;
+}
+input, select, button {
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+#result {
+  margin-top: 2rem;
+}

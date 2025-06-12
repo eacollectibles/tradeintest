@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buyback Search</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>Card Buyback Search</h1>
+  <form id="buybackForm">
+    <input type="text" name="cardName" placeholder="Search for a card..." required />
+    <select name="condition" required>
+      <option value="">Select Condition</option>
+      <option value="NM">Near Mint</option>
+      <option value="LP">Lightly Played</option>
+      <option value="MP">Moderately Played</option>
+    </select>
+    <button type="submit">Check Buyback Value</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById("buybackForm");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      const response = await fetch("/.netlify/functions/buybackstep4", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      if (data.message) {
+        result.innerHTML = `<p><strong>${data.message}</strong></p>`;
+      } else {
+        result.innerHTML = `
+          <p><strong>Product:</strong> ${data.product}</p>
+          <p><strong>Retail Price:</strong> ${data.retailPrice}</p>
+          <p><strong>Condition:</strong> ${data.condition}</p>
+          <p><strong>Buyback Offer:</strong> ${data.buybackOffer}</p>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
